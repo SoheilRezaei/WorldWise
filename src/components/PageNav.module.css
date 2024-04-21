@@ -6,3 +6,7 @@
   display: flex;
   justify-content: space-between;
 }
+
+.nav :global(.active) {
+  background-color: green;
+}
