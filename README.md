@@ -1,3 +1,6 @@
+WorldWise is a tracking app that allows the user to add the places they've visited and write a review/memo on the places that the user has visited.
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
