@@ -6,7 +6,7 @@ type CityItemProps = {
   key: number;
 };
 
-const formatDate = (date) =>
+const formatDate = (date: string | number) =>
   new Intl.DateTimeFormat("en-US", {
     day: "numeric",
     month: "long",
