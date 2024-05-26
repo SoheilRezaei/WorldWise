@@ -4,15 +4,18 @@ import { City } from "../components/CityList.tsx";
 interface CitiesContext {
     cities: City[];
     isLoading: boolean;
+    currentCity: City | null;
+    getCity: (id: number) => void;
 }
 
 const CitiesContext = createContext<CitiesContext>()
 const BASE_URL = "http://localhost:8000";
 
 
-function CitiesProvider({children} : {children: React.ReactNode}) {
+function CitiesProvider({children}: { children: React.ReactNode }) {
     const [cities, setCities] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [currentCity, setCurrentCity] = useState({});
 
     useEffect(() => {
         async function fetchCities() {
@@ -30,8 +33,22 @@ function CitiesProvider({children} : {children: React.ReactNode}) {
         fetchCities();
     }, []);
 
+    async function getCity(id: number) {
+        try {
+            setIsLoading(true);
+            const res = await fetch(`${BASE_URL}/cities/${id}`);
+            const data = await res.json();
+            setCurrentCity(data);
+        } catch {
+            alert("There was an error loading data...");
+        } finally {
+            setIsLoading(false);
+        }
+
+    }
+
     return (
-        <CitiesContext.Provider value={{cities, isLoading}}>
+        <CitiesContext.Provider value={{cities, isLoading, currentCity, getCity}}>
             {children}
         </CitiesContext.Provider>
     )
@@ -43,4 +60,4 @@ function useCities() {
     return context;
 }
 
-export {CitiesProvider, useCities}
+export { CitiesProvider, useCities};

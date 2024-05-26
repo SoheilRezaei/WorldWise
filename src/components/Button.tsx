@@ -2,7 +2,7 @@ import styles from './Button.module.css'
 
 type ButtonProps = {
     children: React.ReactNode;
-    onClick: () => void;
+    onClick?: (e) => void;
     type: 'primary' | 'back';
 
 }
