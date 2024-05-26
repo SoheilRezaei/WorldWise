@@ -2,6 +2,7 @@ import styles from "./CityList.module.css";
 import Spinner from "./Spinner";
 import CityItem from "./CityItem";
 import Message from "./Message";
+import { useCities } from "../context/CitiesContext.tsx";
 
 export type City = {
   cityname: string;
@@ -18,7 +19,9 @@ type CityListProps = {
   isLoading: boolean;
 };
 
-export default function CityList({ cities, isLoading }: CityListProps) {
+export default function CityList() {
+  const {cities, isLoading}: CityListProps = useCities()
+
   if (isLoading) {
     return <Spinner />;
   }
