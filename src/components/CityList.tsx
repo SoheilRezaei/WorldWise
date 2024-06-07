@@ -5,7 +5,7 @@ import Message from "./Message";
 import { useCities } from "../context/CitiesContext.tsx";
 
 export type City = {
-  cityname: string;
+  cityName: string;
   country: string;
   emoji: string;
   date: string;
