@@ -4,22 +4,31 @@ import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvent } from "rea
 import { useEffect, useState } from "react";
 import { LatLngExpression } from "leaflet";
 import { useCities } from "../context/CitiesContext.tsx";
+import { useGeolocation } from "../hooks/useGeoLocation.ts";
+import Button from "./Button.tsx";
 
 function Map() {
     const { cities } = useCities();
 
     const [mapPosition, setMapPosition] = useState<LatLngExpression>([40, 0])
     const [searchParams] = useSearchParams()
-
-    const mapLat : number = searchParams.get("lat");
-    const mapLng : number = searchParams.get("lng");
+    const {isLoading: isLoadingPosition, position: geolocationPosition, getPosition} = useGeolocation();
+    const mapLat  = searchParams.get("lat");
+    const mapLng = searchParams.get("lng");
 
     useEffect(() => {
         if (mapLat && mapLng) setMapPosition([mapLat,mapLng]);
     }, [mapLat, mapLng]);
 
+    useEffect(() => {
+        if(geolocationPosition) setMapPosition(geolocationPosition);
+    }, [geolocationPosition]);
+
     return (
         <div className={styles.mapContainer}>
+            <Button type="position" onClick={getPosition}>
+                {isLoadingPosition ? "Loading..." : "Your position"}
+            </Button>
             <MapContainer center={mapPosition} zoom={13} scrollWheelZoom={true} className={styles.map}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
