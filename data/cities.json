@@ -35,6 +35,18 @@
         "lng": 13.376933665713324
       },
       "id": "98443197"
+    },
+    {
+      "id": "8ddc",
+      "cityName": "Toronto",
+      "country": "Canada",
+      "emoji": "🇨🇦",
+      "date": "2024-06-15T22:26:43.891Z",
+      "notes": "warmer than I thought",
+      "position": {
+        "lat": 43.66340125095973,
+        "lng": -79.36386108398439
+      }
     }
   ]
 }
