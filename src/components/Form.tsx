@@ -8,6 +8,8 @@ import BackButton from "./BackButton.tsx";
 import { useURLPosition } from "../hooks/useURLPosition.ts";
 import Message from "./Message.tsx";
 import Spinner from "./Spinner.tsx";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -52,6 +54,11 @@ function Form() {
         fetchCityData();
     }, [lat, lng]);
 
+    function handleSubmit(e) {
+        e.preventDefault();
+        if(!cityName || !date) return;
+    }
+
     if (isLoadingGeocoding) {
         return <Spinner />;
     }
@@ -74,20 +81,22 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
-          id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
-        />
+          {/* <input
+              id="date"
+              onChange={(e) => setDate(e.target.value)}
+              value={date}
+          /> */}
+          <DatePicker id="date" onChange={(date) => setDate(date)} selected={date}/>
       </div>
 
       <div className={styles.row}>
         <label htmlFor="notes">Notes about your trip to {cityName}</label>
-        <textarea
-          id="notes"
-          onChange={(e) => setNotes(e.target.value)}
-          value={notes}
-        />
+          <textarea
+              id="notes"
+              onChange={(e) => setNotes(e.target.value)}
+              value={notes}
+          />
+
       </div>
 
       <div className={styles.buttons}>
