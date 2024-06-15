@@ -13,11 +13,14 @@ function Map() {
     const [mapPosition, setMapPosition] = useState<LatLngExpression>([40, 0])
     const [searchParams] = useSearchParams()
     const {isLoading: isLoadingPosition, position: geolocationPosition, getPosition} = useGeolocation();
-    const mapLat  = searchParams.get("lat");
-    const mapLng = searchParams.get("lng");
+    const mapLat : number  = Number(searchParams.get("lat"));
+    const mapLng : number = Number(searchParams.get("lng"));
 
     useEffect(() => {
-        if (mapLat && mapLng) setMapPosition([mapLat,mapLng]);
+        if (mapLat && mapLng) {
+            const position : LatLngExpression = [mapLat, mapLng]
+            setMapPosition(position);
+        }
     }, [mapLat, mapLng]);
 
     useEffect(() => {
@@ -48,7 +51,7 @@ function Map() {
         );
 }
 
-function ChangeCenter({position}) {
+function ChangeCenter({position} : {position: LatLngExpression}) {
     const map = useMap()
     map.setView(position);
     return null;
