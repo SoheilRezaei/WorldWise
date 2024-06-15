@@ -3,7 +3,7 @@ import styles from './Button.module.css'
 type ButtonProps = {
     children: React.ReactNode;
     onClick?: (e) => void;
-    type: 'primary' | 'back';
+    type: 'primary' | 'back' | 'position';
 
 }
 
