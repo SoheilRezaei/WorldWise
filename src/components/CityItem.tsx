@@ -14,9 +14,16 @@ const formatDate = (date: string | number) =>
         year: "numeric",
     }).format(new Date(date));
 
+
+
 export default function CityItem({city}: CityItemProps) {
-    const {currentCity} = useCities();
-    const {cityname, date, emoji, id, position} = city;
+    const {currentCity, deleteCity} = useCities();
+    const {cityName, date, emoji, id, position} = city;
+
+    function handleClick(e) {
+        e.preventDefault();
+        deleteCity(id);
+    }
 
     return (
         <li>
@@ -24,9 +31,9 @@ export default function CityItem({city}: CityItemProps) {
                 id === currentCity?.id ? styles['cityItem--active'] : ""
             }`} to={`${id}?lat=${position.lat}&lng=${position.lng}`}>
                 <span className={styles.emoji}>{emoji}</span>
-                <h3 className={styles.name}>{cityname}</h3>
+                <h3 className={styles.name}>{cityName}</h3>
                 <time className={styles.date}>{formatDate(date)}</time>
-                <button className={styles.deleteBtn}>&times;</button>
+                <button className={styles.deleteBtn} onClick={handleClick}>&times;</button>
             </Link>
         </li>
     );
