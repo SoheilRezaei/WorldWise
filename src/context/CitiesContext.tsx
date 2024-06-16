@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useReducer, useState } from 'react';
 import { City } from "../components/CityList.tsx";
+import { act } from "react-dom/test-utils";
 
 interface CitiesContext {
     cities: City[];
@@ -29,9 +30,9 @@ function reducer(state, action) {
         case "city/loaded":
             return {...state, isLoading: false, currentCity: action.payload};
         case "city/created":
-            return {...state, isLoading: false, cities: [...state.cities, action.payload]};
+            return {...state, isLoading: false, cities: [...state.cities, action.payload], currentCity: action.payload};
         case "cities/deleted":
-            return {...state, cities: state.cities.filter((city) => city.id !== action.payload)};
+            return {...state, cities: state.cities.filter((city) => city.id !== action.payload), currentCity: {}};
         case "rejected":
             return {...state, isLoading:false, error: action.payload};
         default:
@@ -40,7 +41,7 @@ function reducer(state, action) {
 }
 
 function CitiesProvider({children}: { children: React.ReactNode }) {
-    const [{cities, isLoading, currentCity}, dispatch] = useReducer(
+    const [{cities, isLoading, currentCity, error}, dispatch] = useReducer(
         reducer,
         initialState
     )
@@ -66,6 +67,7 @@ function CitiesProvider({children}: { children: React.ReactNode }) {
     }, []);
 
     async function getCity(id: number) {
+        if (Number(id) === currentCity.id) return;
         dispatch({type: "loading"})
         try {
             const res = await fetch(`${BASE_URL}/cities/${id}`);
@@ -113,7 +115,7 @@ function CitiesProvider({children}: { children: React.ReactNode }) {
     }
 
     return (
-        <CitiesContext.Provider value={{cities, isLoading, currentCity, createCity, deleteCity, getCity}}>
+        <CitiesContext.Provider value={{cities, isLoading, currentCity, createCity, deleteCity, getCity, error}}>
             {children}
         </CitiesContext.Provider>
     )
