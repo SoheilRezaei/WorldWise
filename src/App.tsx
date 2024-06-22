@@ -11,6 +11,7 @@ import City from "./components/City.tsx";
 import Form from "./components/Form.tsx";
 import { CitiesProvider } from "./context/CitiesContext.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import ProtectedRoute from "./pages/ProtectedRoute.tsx";
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
                         <Route path="pricing" element={<Pricing/>}/>
                         <Route path="/login" element={<Login/>}/>
                         <Route path="*" element={<PageNotFound/>}/>
-                        <Route path="app" element={<AppLayout/>}>
+                        <Route path="app" element={<ProtectedRoute><AppLayout/></ProtectedRoute>}>
                             <Route
                                 index
                                 element={<Navigate replace to="cities"/>}
