@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useEffect, useReducer, useState } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import { City } from "../components/CityList.tsx";
-import { act } from "react-dom/test-utils";
 
 interface CitiesContext {
     cities: City[];
@@ -8,7 +7,7 @@ interface CitiesContext {
     currentCity: City | null;
     getCity: (id: number) => void;
     createCity: (newCity: City) => void;
-    deleteCity: (id: number) => void;
+    deleteCity: (id: number) => void
 }
 
 const CitiesContext = createContext<CitiesContext>()
