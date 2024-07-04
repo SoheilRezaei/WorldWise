@@ -16,18 +16,22 @@ interface CitiesContext {
     currentCity: City | null;
     getCity: (id: number) => void;
     createCity: (newCity: City) => void;
-    deleteCity: (id: number) => void
+    deleteCity: (id: number) => void;
+    error: string
 }
 
 const CitiesContext = createContext<CitiesContext>()
 const BASE_URL = "http://localhost:8000";
 
-const initialState = {
+const initialState: CitiesContext = {
     cities: [],
     isLoading: false,
-    currentCity: {},
+    currentCity: null, // Adjusted to match the type (City | null)
+    getCity: () => {}, // Dummy function, replace with actual implementation
+    createCity: () => {},
+    deleteCity: () => {},
     error: ""
-}
+};
 
 type loading = { type: "loading" };
 type citiesLoaded = { type: "cities/loaded"; payload: City[] };
@@ -36,10 +40,10 @@ type cityCreated = { type: "city/created"; payload: City };
 type citiesDeleted = { type: "cities/deleted"; payload: number };
 type rejected = { type: "rejected"; payload: string };
 
-export type Action = loading | citiesLoaded | cityLoaded | cityCreated | citiesDeleted | rejected;
+export type CitiesAction = loading | citiesLoaded | cityLoaded | cityCreated | citiesDeleted | rejected;
 
-function reducer(state: CitiesContext, action: Action) {
-    switch(action.type) {
+function reducer(state: CitiesContext, action: CitiesAction) : CitiesContext {
+    switch (action.type) {
         case "loading":
             return {...state, isLoading: true};
         case "cities/loaded":
@@ -49,9 +53,9 @@ function reducer(state: CitiesContext, action: Action) {
         case "city/created":
             return {...state, isLoading: false, cities: [...state.cities, action.payload], currentCity: action.payload};
         case "cities/deleted":
-            return {...state, cities: state.cities.filter((city) => city.id !== action.payload), currentCity: {}};
+            return {...state, cities: state.cities.filter((city) => city.id !== action.payload), currentCity: null};
         case "rejected":
-            return {...state, isLoading:false, error: action.payload};
+            return {...state, isLoading: false, error: action.payload};
         default:
             throw new Error("Unknown Action Type")
     }
@@ -79,12 +83,12 @@ function CitiesProvider({children}: { children: React.ReactNode }) {
                 });
             }
         }
-            fetchCities();
+        fetchCities();
 
     }, []);
 
     async function getCity(id: number) {
-        if (Number(id) === currentCity.id) return;
+        if (Number(id) === currentCity?.id) return;
         dispatch({type: "loading"})
         try {
             const res = await fetch(`${BASE_URL}/cities/${id}`);
@@ -98,7 +102,7 @@ function CitiesProvider({children}: { children: React.ReactNode }) {
 
     }
 
-    async function createCity(newCity) {
+    async function createCity(newCity : City) {
         dispatch({type: "loading"})
         try {
             const res = await fetch(`${BASE_URL}/cities`, {
@@ -144,4 +148,4 @@ function useCities() {
     return context;
 }
 
-export { CitiesProvider, useCities};
+export { CitiesProvider, useCities };
