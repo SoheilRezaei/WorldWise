@@ -1,5 +1,14 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
-import { City } from "../components/CityList.tsx";
+
+export type City = {
+    cityName: string;
+    country: string;
+    emoji: string;
+    date: string;
+    notes: string;
+    position: { lat: number; lng: number };
+    id: number;
+};
 
 interface CitiesContext {
     cities: City[];
@@ -20,7 +29,16 @@ const initialState = {
     error: ""
 }
 
-function reducer(state, action) {
+type loading = { type: "loading" };
+type citiesLoaded = { type: "cities/loaded"; payload: City[] };
+type cityLoaded = { type: "city/loaded"; payload: City };
+type cityCreated = { type: "city/created"; payload: City };
+type citiesDeleted = { type: "cities/deleted"; payload: number };
+type rejected = { type: "rejected"; payload: string };
+
+export type Action = loading | citiesLoaded | cityLoaded | cityCreated | citiesDeleted | rejected;
+
+function reducer(state: CitiesContext, action: Action) {
     switch(action.type) {
         case "loading":
             return {...state, isLoading: true};
