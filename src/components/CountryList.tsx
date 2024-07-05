@@ -1,9 +1,8 @@
 import Spinner from "./Spinner";
 import styles from "./CountryList.module.css";
 import Message from "./Message"
-import {City} from "./CityList"
 import CountryItem from "./CountryItem.tsx";
-import { useCities } from "../context/CitiesContext.tsx";
+import { City, useCities } from "../context/CitiesContext.tsx";
 
 type CountriesListProps = {
     cities: City[];

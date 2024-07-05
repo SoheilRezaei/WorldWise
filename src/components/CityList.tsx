@@ -2,17 +2,7 @@ import styles from "./CityList.module.css";
 import Spinner from "./Spinner";
 import CityItem from "./CityItem";
 import Message from "./Message";
-import { useCities } from "../context/CitiesContext.tsx";
-
-export type City = {
-  cityName: string;
-  country: string;
-  emoji: string;
-  date: string;
-  notes: string;
-  position: { lat: number; lng: number };
-  id: number;
-};
+import { City, useCities } from "../context/CitiesContext.tsx";
 
 type CityListProps = {
   cities: City[];
