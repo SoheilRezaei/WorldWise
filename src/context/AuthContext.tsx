@@ -1,13 +1,33 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, ReactNode, useContext, useReducer } from "react";
 
-const AuthContext = createContext();
+export type User = {
+    name: string;
+    email: string;
+    password: string;
+    avatar: string;
+} | null;
+
+interface AuthContext {
+    user?: User;
+    isAuthenticated: boolean;
+}
+
+export type AuthAction =
+{
+    type: "login";
+    payload: User;
+} | {
+    type: "logout";
+}
+
+const AuthContext = createContext<AuthContext | undefined>(undefined);
 
 const initialState = {
     user: null,
     isAuthenticated: false,
 }
 
-function reducer(state, action) {
+function reducer(state : AuthContext, action: AuthAction) : AuthContext {
     switch (action.type) {
         case "login":
             return {...state, user: action.payload, isAuthenticated: true}
@@ -18,20 +38,20 @@ function reducer(state, action) {
     }
 }
 
-const FAKE_USER = {
+const FAKE_USER : User = {
     name: "John Doe",
     email: "johndoe@gmail.com",
     password: "A$$w0rd",
     avatar: "https://www.gravatar.com/avatar/"
 }
 
-function AuthProvider({children}) {
+function AuthProvider({children} : {children: ReactNode}) {
     const [{user, isAuthenticated}, dispatch] = useReducer(reducer, initialState)
 
-    function login(email, password) {
+    function login(email: string, password: string) {
         //FAKE USER LOGIN
         //INSTEAD OF THIS, YOU WOULD MAKE A REQUEST TO YOUR SERVER
-        if (email === FAKE_USER.email && password === FAKE_USER.password) {
+        if (email === FAKE_USER?.email && password === FAKE_USER?.password) {
             dispatch({type: "login", payload: FAKE_USER})
         }
 

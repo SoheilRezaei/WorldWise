@@ -8,28 +8,28 @@ export type City = {
     notes: string;
     position: { lat: number; lng: number };
     id: number;
-};
+}
 
 interface CitiesContext {
     cities: City[];
     isLoading: boolean;
     currentCity: City | null;
-    getCity: (id: number) => void;
+    getCity: (id: string) => void;
     createCity: (newCity: City) => void;
     deleteCity: (id: number) => void;
     error: string
 }
 
-const CitiesContext = createContext<CitiesContext>()
+const CitiesContext = createContext<CitiesContext | undefined>(undefined)
 const BASE_URL = "http://localhost:8000";
 
 const initialState: CitiesContext = {
     cities: [],
     isLoading: false,
-    currentCity: null, // Adjusted to match the type (City | null)
-    getCity: () => {}, // Dummy function, replace with actual implementation
+    getCity: () => {},
     createCity: () => {},
     deleteCity: () => {},
+    currentCity: null, // Adjusted to match the type (City | null)
     error: ""
 };
 
@@ -53,7 +53,7 @@ function reducer(state: CitiesContext, action: CitiesAction) : CitiesContext {
         case "city/created":
             return {...state, isLoading: false, cities: [...state.cities, action.payload], currentCity: action.payload};
         case "cities/deleted":
-            return {...state, cities: state.cities.filter((city) => city.id !== action.payload), currentCity: null};
+            return {...state, cities: state.cities.filter((city) => city.id !== action.payload), isLoading:false, currentCity: null};
         case "rejected":
             return {...state, isLoading: false, error: action.payload};
         default:
@@ -87,7 +87,7 @@ function CitiesProvider({children}: { children: React.ReactNode }) {
 
     }, []);
 
-    async function getCity(id: number) {
+    async function getCity(id: string) {
         if (Number(id) === currentCity?.id) return;
         dispatch({type: "loading"})
         try {
