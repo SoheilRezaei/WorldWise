@@ -6,13 +6,16 @@ import Spinner from "./Spinner.tsx";
 import BackButton from "./BackButton.tsx";
 
 
-const formatDate = (date) =>
-    new Intl.DateTimeFormat("en", {
+const formatDate = (date: string | null): string => {
+    if (!date) return ""; // Return an empty string or some default value if date is null
+    return new Intl.DateTimeFormat("en", {
         day: "numeric",
         month: "long",
         year: "numeric",
         weekday: "long",
     }).format(new Date(date));
+};
+
 
 function City() {
     const {id}: Params = useParams()
@@ -22,7 +25,7 @@ function City() {
         if (id != null) {
             getCity(id)
         }
-    }, [id]);
+    }, [id, getCity]);
 
     // const {cityName, emoji, date, notes} = currentCity;
     const cityName = currentCity?.cityName;

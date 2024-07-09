@@ -23,11 +23,18 @@ export default function CountryList() {
             <Message message="Add your first country by clicking on a country on the map"/>
         );
 
-    const countries = cities.reduce((arr, city) => {
-        if (!arr.map((el) => el.country).includes(city.country))
-            return [...arr, {country: city.country, emoji: city.emoji}]
-        else return arr;
+    const countries : Country[] = cities.reduce((arr : Country[], city : City) => {
+        const countryExists = arr.some((el: Country) => el.country === city.country);
+        if (!countryExists) {
+            return [...arr, { country: city.country, emoji: city.emoji }];
+        } else {
+            return arr;
+        }
     }, []);
+    //     if (!arr.map((el : City) => el.country).includes(city.country))
+    //         return [...arr, {country: city.country, emoji: city.emoji}]
+    //     else return arr;
+    // }, []);
 
     return (
         <ul className={styles.countryList}>

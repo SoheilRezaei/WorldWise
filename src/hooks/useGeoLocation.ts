@@ -2,10 +2,10 @@ import { useState } from "react";
 import { LatLngExpression } from "leaflet";
 
 
-export function useGeolocation(defaultPosition : LatLngExpression) {
+export function useGeolocation() {
     const [isLoading, setIsLoading] = useState(false);
     const [position, setPosition] = useState<LatLngExpression>([40, 0]);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string>("");
 
     function getPosition() {
         if (!navigator.geolocation)

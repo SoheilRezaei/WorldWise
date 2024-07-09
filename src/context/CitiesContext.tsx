@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react';
 
 export type City = {
     cityName: string;
@@ -7,7 +7,7 @@ export type City = {
     date: string;
     notes: string;
     position: { lat: number; lng: number };
-    id: number;
+    id: number | undefined
 }
 
 interface CitiesContext {
@@ -26,9 +26,12 @@ const BASE_URL = "http://localhost:8000";
 const initialState: CitiesContext = {
     cities: [],
     isLoading: false,
-    getCity: () => {},
-    createCity: () => {},
-    deleteCity: () => {},
+    getCity: () => {
+    },
+    createCity: () => {
+    },
+    deleteCity: () => {
+    },
     currentCity: null, // Adjusted to match the type (City | null)
     error: ""
 };
@@ -42,7 +45,7 @@ type rejected = { type: "rejected"; payload: string };
 
 export type CitiesAction = loading | citiesLoaded | cityLoaded | cityCreated | citiesDeleted | rejected;
 
-function reducer(state: CitiesContext, action: CitiesAction) : CitiesContext {
+function reducer(state: CitiesContext, action: CitiesAction): CitiesContext {
     switch (action.type) {
         case "loading":
             return {...state, isLoading: true};
@@ -53,7 +56,12 @@ function reducer(state: CitiesContext, action: CitiesAction) : CitiesContext {
         case "city/created":
             return {...state, isLoading: false, cities: [...state.cities, action.payload], currentCity: action.payload};
         case "cities/deleted":
-            return {...state, cities: state.cities.filter((city) => city.id !== action.payload), isLoading:false, currentCity: null};
+            return {
+                ...state,
+                cities: state.cities.filter((city) => city.id !== action.payload),
+                isLoading: false,
+                currentCity: null
+            };
         case "rejected":
             return {...state, isLoading: false, error: action.payload};
         default:
@@ -83,26 +91,28 @@ function CitiesProvider({children}: { children: React.ReactNode }) {
                 });
             }
         }
+
         fetchCities();
 
     }, []);
 
-    async function getCity(id: string) {
-        if (Number(id) === currentCity?.id) return;
-        dispatch({type: "loading"})
-        try {
-            const res = await fetch(`${BASE_URL}/cities/${id}`);
-            const data = await res.json();
-            dispatch({type: "city/loaded", payload: data})
-        } catch {
-            dispatch({
-                type: "rejected", payload: "There was an error loading data..."
-            });
-        }
+    const getCity = useCallback( async function getCity(id: string) {
+            if (Number(id) === currentCity?.id) return;
+            dispatch({type: "loading"})
+            try {
+                const res = await fetch(`${BASE_URL}/cities/${id}`);
+                const data = await res.json();
+                dispatch({type: "city/loaded", payload: data})
+            } catch {
+                dispatch({
+                    type: "rejected", payload: "There was an error loading data..."
+                });
+            }
 
-    }
+        }, [currentCity?.id]
+    )
 
-    async function createCity(newCity : City) {
+    async function createCity(newCity: City) {
         dispatch({type: "loading"})
         try {
             const res = await fetch(`${BASE_URL}/cities`, {

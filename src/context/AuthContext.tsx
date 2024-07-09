@@ -10,6 +10,8 @@ export type User = {
 interface AuthContext {
     user?: User;
     isAuthenticated: boolean;
+    login: (email: string, password: string) => void;
+    logout: () => void;
 }
 
 export type AuthAction =
@@ -25,6 +27,8 @@ const AuthContext = createContext<AuthContext | undefined>(undefined);
 const initialState = {
     user: null,
     isAuthenticated: false,
+    login: () => {},
+    logout: () => {}
 }
 
 function reducer(state : AuthContext, action: AuthAction) : AuthContext {

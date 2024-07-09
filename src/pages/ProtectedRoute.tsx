@@ -2,7 +2,7 @@ import { useAuth } from "../context/AuthContext.tsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-export function ProtectedRoute({children}) {
+export function ProtectedRoute({children} : {children: React.ReactNode}) {
     const {isAuthenticated} = useAuth();
     const navigate = useNavigate();
 
