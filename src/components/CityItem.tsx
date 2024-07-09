@@ -19,9 +19,9 @@ export default function CityItem({city}: CityItemProps) {
     const {currentCity, deleteCity} = useCities();
     const {cityName, date, emoji, id, position} = city;
 
-    function handleClick(e) {
+    function handleClick(e : React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
-        deleteCity(id);
+        id && deleteCity(id);
     }
 
     return (

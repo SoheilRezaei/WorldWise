@@ -25,6 +25,8 @@ function Map() {
         if(geolocationPosition) setMapPosition(geolocationPosition);
     }, [geolocationPosition]);
 
+    
+    
     return (
         <div className={styles.mapContainer}>
             <Button type="position" onClick={getPosition}>
@@ -43,7 +45,10 @@ function Map() {
                     </Popup>
                 </Marker>))}
                 <ChangeCenter position={mapPosition}/>
-                <DetectClick />
+                {
+                    // @ts-expect-error leaflet being weird
+                    <DetectClick/>
+                }
             </MapContainer>
         </div>
         );
@@ -55,12 +60,20 @@ function ChangeCenter({position} : {position: LatLngExpression}) {
     return null;
 }
 
+// function DetectClick() {
+//     const navigate = useNavigate();
+//
+//     useMapEvent({
+//             click: (e: { latlng: { lat: number; lng: number; }; }) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`)
+//         })
+// }
+
 function DetectClick() {
     const navigate = useNavigate();
 
-    useMapEvent({
-            click: (e) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`)
-        })
+    useMapEvent('click', (e) => {
+        navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
+    });
 }
 
 export default Map;

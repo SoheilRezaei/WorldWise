@@ -13,7 +13,7 @@ export default function Login() {
     const {login, isAuthenticated} = useAuth();
     const navigate = useNavigate();
 
-    function handleSubmit(e) {
+    function handleSubmit(e : React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (email && password) login(email, password);
     }
