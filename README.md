@@ -1,5 +1,6 @@
 WorldWise is a tracking app that allows the user to add the places they've visited and write a review/memo on the places that the user has visited.
 
+Future plan: Supabase backend
 
 Front end:
 
